@@ -168,6 +168,7 @@ class _GeneralDataState extends State<GeneralData> {
                     splashColor: Colors.white10,
                     radius: 30,
                     onTap: () {
+                      // gymRegModel.nextPage();
                       if (_formKey.currentState.validate()) {
                         if (gymRegModel.getGym.picture.length == 0) {
                           setState(() {

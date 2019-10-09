@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gym_go/class/var_globales.dart';
 import 'package:gym_go/model/gym_reg_model.dart';
 import 'package:gym_go/model/user.dart';
+import 'package:gym_go/pages/gym_registration/pin_in_map.dart';
 import 'package:gym_go/style/text.dart';
 import 'package:gym_go/widget/button/button_next_gym.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 class Direction extends StatefulWidget {
   @override
@@ -12,6 +17,13 @@ class Direction extends StatefulWidget {
 
 class _DirectionState extends State<Direction> {
   final _formKey = GlobalKey<FormState>();
+  MapController mapController = MapController();
+
+  @override
+  void initState() {
+    
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     GymRegModel gymRegModel = Provider.of(context);
@@ -63,8 +75,52 @@ class _DirectionState extends State<Direction> {
               SizedBox(
                 height: 32,
               ),
-              Container(
-                child: Text('Mapa'),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PinInMap(
+                                gymRegModel: gymRegModel,
+                                mapController: mapController
+                              )));
+                },
+                child: Container(
+                  height: 200,
+                  width: double.infinity,
+                  child: FlutterMap(
+                      options: MapOptions(
+                        interactive: false,
+                        center: gymRegModel.getGym.location,
+                        debug: true,
+                        
+                        zoom: 13
+                      ),
+                      mapController: 
+                        mapController
+                      ,
+                      layers: [
+                        TileLayerOptions(
+                          urlTemplate: "https://api.tiles.mapbox.com/v4/"
+                              "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+                          additionalOptions: {
+                            'accessToken': VarGlobales.mapKey,
+                            'id': 'mapbox.streets',
+                          },
+                        ),
+                        MarkerLayerOptions(markers: [
+                          Marker(
+                            anchorPos: AnchorPos.align(AnchorAlign.top),
+                            width: 30.0,
+                            height: 30.0,
+                            point: gymRegModel.getGym.location,
+                            builder: (ctx) => new Container(
+                              child: new SvgPicture.asset('images/pin.svg'),
+                            ),
+                          )
+                        ])
+                      ]),
+                ),
               ),
               SizedBox(
                 height: 32,
@@ -76,7 +132,7 @@ class _DirectionState extends State<Direction> {
                     color: Colors.white,
                     splashColor: Colors.blue,
                     radius: 30,
-                    onTap: (){
+                    onTap: () {
                       _formKey.currentState.save();
                       gymRegModel.previousPage();
                     },
@@ -109,10 +165,8 @@ class _DirectionState extends State<Direction> {
                     radius: 30,
                     onTap: () {
                       if (_formKey.currentState.validate()) {
-                        
-                          _formKey.currentState.save();
-                          gymRegModel.nextPage();
-                      
+                        _formKey.currentState.save();
+                        gymRegModel.nextPage();
                       }
                     },
                     child: Row(

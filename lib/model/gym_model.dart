@@ -19,7 +19,7 @@ class GymModel extends ChangeNotifier {
           .collection('Gym')
           .where('userId', isEqualTo: userId)
           .getDocuments();
-      print(snapshot.documentChanges.length);
+
       snapshot.documentChanges.forEach((DocumentChange doc) {
         Gym gym = Gym.fromMap(doc.document.data);
         list.add(gym);
@@ -41,7 +41,7 @@ class GymModel extends ChangeNotifier {
       List<Gym> list = [];
       QuerySnapshot snapshot =
           await Firestore.instance.collection('Gym').getDocuments();
-      print(snapshot.documentChanges.length);
+
       snapshot.documentChanges.forEach((DocumentChange doc) {
         Gym gym = Gym.fromMap(doc.document.data);
         list.add(gym);

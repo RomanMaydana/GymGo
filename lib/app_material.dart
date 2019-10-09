@@ -4,6 +4,7 @@ import 'package:gym_go/model/gym_model.dart';
 import 'package:gym_go/model/user.dart';
 import 'package:gym_go/pages/detail_gym/detail_gym_page.dart';
 import 'package:gym_go/pages/gym_registration/gym_registration.dart';
+import 'package:gym_go/pages/gym_registration/pin_in_map.dart';
 import 'package:gym_go/pages/my_gyms_page.dart';
 import 'package:gym_go/pages/profile_page.dart';
 import 'package:gym_go/pages/sign_in.dart';
@@ -87,6 +88,9 @@ class AppMaterialGym extends StatelessWidget {
             builder: (context) => DetailGymPage(
                   gym: args.gym,
                 ));
+        break;
+      case '/pininmap':
+        return MaterialPageRoute(builder: (context) => PinInMap());
         break;
     }
   }

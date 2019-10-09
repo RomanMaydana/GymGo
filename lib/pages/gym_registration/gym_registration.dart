@@ -24,7 +24,9 @@ class _GymRegistrationState extends State<GymRegistration>
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of(context);
     return ChangeNotifierProvider(
-      builder: (_) => GymRegModel(vsync: this,userId: userModel.getUser().userId),
+      builder: (_) =>
+          GymRegModel(vsync: this, userId: userModel.getUser().userId)
+            ..location = userModel.getCurrentLocation(),
       child: Consumer<GymRegModel>(builder: (_, gymModel, child) {
         return Theme(
           data: Theme.of(context).copyWith(

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
 
 import 'package:image_picker_modern/image_picker_modern.dart';
 import 'package:path/path.dart' as Path;
@@ -258,8 +259,9 @@ class GymRegModel extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  set location(GeoPoint value) {
+  set location(LatLng value) {
     this._gym.location = value;
+    
     notifyListeners();
   }
 
@@ -295,7 +297,6 @@ class GymRegModel extends ChangeNotifier {
 
   void addSchedule() {
     Schedule schedule = Schedule();
-    print(schedule.hourIn.hour);
     _gym.schedule.add(schedule);
     notifyListeners();
   }

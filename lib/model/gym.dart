@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:latlong/latlong.dart';
 
 class Picture {
   final String name;
@@ -64,7 +65,7 @@ class Gym {
   String _zone;
   String _streetOrAvenue;
   // String _typeDirection;
-  GeoPoint _location;
+  LatLng _location;
 
   Set<String> _service;
   Set<String> _classes;
@@ -90,7 +91,7 @@ class Gym {
       String internationalCode = '+591',
       String zone = '',
       String streetOrAvenue = '',
-      GeoPoint location,
+      LatLng location,
       Set<String> service,
       Set<String> classes,
       List<Schedule> schedule,
@@ -112,10 +113,10 @@ class Gym {
     this._zone = zone;
     this._streetOrAvenue = streetOrAvenue;
     // this._typeDirection = typeDirection;
-    this._location = location ?? GeoPoint(0, 0);
+    this._location = location ?? LatLng(0, 0);
 
     this._service = service ?? Set();
-    this._classes = service ?? Set();
+    this._classes = classes ?? Set();
     this._schedule = schedule ?? [];
 
     this._price = price;
@@ -139,7 +140,7 @@ class Gym {
       'internationalCode': this._internationalCode,
       'zone': this._zone,
       'streetOrAvenue': this._streetOrAvenue,
-      'location': this._location,
+      'location': GeoPoint(this._location.latitude, this._location.longitude),
       'service': this._service.toList(),
       'classes': this._classes.toList(),
       'schedule': this._schedule.map((schedule) => schedule.toMap()).toList(),
@@ -152,6 +153,7 @@ class Gym {
   }
 
   factory Gym.fromMap(Map doc) {
+    
     Gym gym = Gym(
         name: doc['name'],
         picture: (doc['picture'] as List)
@@ -165,7 +167,7 @@ class Gym {
         internationalCode: doc['internationalCode'],
         zone: doc['zone'],
         streetOrAvenue: doc['streetOrAvenue'],
-        location: doc['location'],
+        location: LatLng(doc['location'].latitude,doc['location'].longitude),
         service: doc['service'].cast<String>().toSet(),
         classes: doc['classes'].cast<String>().toSet(),
         schedule: (doc['schedule'] as List)
@@ -271,9 +273,10 @@ class Gym {
   //   _typeDirection = value;
   // }
 
-  GeoPoint get location => _location;
+  LatLng get location => _location;
 
-  set location(GeoPoint value) {
+  set location(LatLng value) {
+   
     _location = value;
   }
 

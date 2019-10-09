@@ -126,13 +126,15 @@ class CardListGym extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-               Expanded(child:  Text(
-                  '${gym.zone}, ${gym.streetOrAvenue}',
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600),
-                ),),
+                Expanded(
+                  child: Text(
+                    '${gym.zone}, ${gym.streetOrAvenue}',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
                 gym.statePlan
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
@@ -154,13 +156,26 @@ class CardListGym extends StatelessWidget {
                           )
                         ],
                       )
-                    : Text(
-                        'Sin Plan',
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400),
-                      ),
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Sin Plan',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Icon(
+                            Icons.close,
+                            color: Theme.of(context).accentColor,
+                            size: 20,
+                          )
+                        ],
+                      )
               ],
             )
           ],

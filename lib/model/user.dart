@@ -5,6 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong/latlong.dart';
+
 enum AuthStatus { sign_in, sign_up, logged_in }
 
 class User {
@@ -63,13 +66,23 @@ class UserModel extends ChangeNotifier {
   FirebaseUser userFirebase;
   StreamSubscription userAuthSub;
   AuthStatus _authStatus;
+  Position _position;
   User _user;
   UserModel() {
     _authStatus = AuthStatus.sign_in;
+    getPosition();
     userAuthSub = FirebaseAuth.instance.onAuthStateChanged
         .listen(_getUserFirebase, onError: (e) {
       print('AuthProvider - FirebaseAuth - onAuthStateChanged - $e');
     });
+  }
+  Future getPosition() async {
+    _position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
+  getCurrentLocation() {
+    return LatLng(_position.latitude, _position.longitude);
   }
 
   Future<void> _getUserFirebase(FirebaseUser newUser) async {
@@ -113,18 +126,21 @@ class UserModel extends ChangeNotifier {
   }
 
   Future<void> signUp(String email, String password, String name) async {
-    FirebaseUser userF = (await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password))
-        .user;
-    Firestore firestore = Firestore.instance;
-    User newUser =
-        User(email: email, fullName: name, userId: userF.uid.toString());
+    try {
+      FirebaseUser userF = (await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(email: email, password: password))
+          .user;
+      Firestore firestore = Firestore.instance;
+      User newUser =
+          User(email: email, fullName: name, userId: userF.uid.toString());
 
-    final result = await firestore
-        .collection('user')
-        .document(userF.uid.toString())
-        .setData(newUser.toMap());
-
+      await firestore
+          .collection('user')
+          .document(userF.uid.toString())
+          .setData(newUser.toMap());
+    } catch (e) {
+      print('error $e');
+    }
     // if (result != null) {
     //   _authStatus = AuthStatus.logged_in;
     //   notifyListeners();

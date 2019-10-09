@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_go/class/var_globales.dart';
 import 'package:gym_go/model/gym.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:gym_go/pages/detail_gym/information.dart';
+import 'package:gym_go/pages/detail_gym/reviews.dart';
 import 'package:gym_go/style/text.dart';
 import 'package:gym_go/widget/stars.dart';
 
@@ -45,10 +47,10 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 2);
-    _scrollController = ScrollController()
-      ..addListener(() {
-        setState(() {});
-      });
+    _scrollController = ScrollController();
+    // ..addListener(() {
+    //   setState(() {});
+    // });
 
     super.initState();
   }
@@ -83,7 +85,8 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
               background: SizedBox(
                 child: Carousel(
                     // boxFit: BoxFit.fill,
-                    animationDuration: Duration(milliseconds: 1500),
+                    // animationDuration: Duration(milliseconds: 1500),
+                    autoplay: false,
                     dotSize: 4.0,
                     dotSpacing: 15.0,
                     dotColor: Colors.white,
@@ -105,9 +108,18 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    widget.gym.name,
-                    style: StylesText.textBlack20w500,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        widget.gym.name,
+                        style: StylesText.textBlack20w500,
+                      ),
+                      Text(
+                        '${widget.gym.price.toString()} Bs',
+                        style: StylesText.textBlue20w600,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 16,
@@ -127,10 +139,61 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
                   SizedBox(
                     height: 8,
                   ),
-                  Text(
-                    '${widget.gym.zone}, ${widget.gym.streetOrAvenue}',
-                    style: StylesText.textSubtitleRegGym,
-                  )
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          '${widget.gym.zone}, ${widget.gym.streetOrAvenue}',
+                          style: StylesText.textSubtitleRegGym,
+                        ),
+                      ),
+                      widget.gym.statePlan
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              '${widget.gym.plan}',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Icon(
+                              Icons.check_circle,
+                              color: Theme.of(context).accentColor,
+                              size: 20,
+                            )
+                          ],
+                        )
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              '${widget.gym.plan}',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Icon(
+                              Icons.close,
+                              color: Theme.of(context).accentColor,
+                              size: 20,
+                            )
+                          ],
+                        )                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  for (Schedule schedule in widget.gym.schedule)
+              _buildScheduleConfig(schedule),
                 ],
               ),
             ),
@@ -162,47 +225,9 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
           Information(
             gym: widget.gym,
           ),
-          ListView(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(top: _changecolor ? 46 : 0),
-                height: 50,
-                child: Text('index1'),
-              ),
-              Container(
-                height: 50,
-                child: Text('index1'),
-              ),
-              Container(
-                height: 50,
-                child: Text('index1'),
-              ),
-              Container(
-                height: 50,
-                child: Text('index1'),
-              ),
-              Container(
-                height: 50,
-                child: Text('index1'),
-              ),
-              Container(
-                height: 50,
-                child: Text('index1'),
-              ),
-              Container(
-                height: 50,
-                child: Text('index1'),
-              ),
-              Container(
-                height: 50,
-                child: Text('index1'),
-              ),
-              Container(
-                height: 50,
-                child: Text('index1'),
-              ),
-            ],
-          ),
+          Reviews(
+            gym: widget.gym
+          )
         ],
       ),
     );
@@ -234,6 +259,57 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
       sizeIcon: sizeIconStar,
     );
   }
+  
+  Widget _buildScheduleConfig(Schedule schedule) {
+    int index = widget.gym.schedule.indexOf(schedule);
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            for (var day in VarGlobales.day) _buildCheckDay(day, index),
+            SizedBox(
+              width: 8,
+            ),
+            Text(
+                '${schedule.hourIn.hour.toString().padLeft(2, '0')}:${schedule.hourIn.minute.toString().padLeft(2, '0')} - ${schedule.hourOut.hour.toString().padLeft(2, '0')}:${schedule.hourOut.minute.toString().padLeft(2, '0')}'),
+          ],
+        ),
+        SizedBox(
+          height: 4,
+        ),
+        
+        
+      ],
+    );
+  }
+
+  Widget _buildCheckDay(String day, int index) {
+    final alreadySaved = widget.gym.schedule[index].day.contains(day);
+
+    return Tooltip(
+      message: day,
+      verticalOffset: 30,
+      height: 24,
+      child: Material(
+        color: Colors.white,
+        child: Container(
+            padding: const EdgeInsets.all(4.0),
+            height: 25,
+            alignment: Alignment.center,
+            child: Center(
+              child: Text(
+                '${day[0].toUpperCase()}',
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: alreadySaved ? Colors.green : Colors.black26),
+              ),
+            )),
+      ),
+    );
+  }
+
 }
 
 class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
