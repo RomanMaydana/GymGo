@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gym_go/model/gym_model.dart';
 import 'package:gym_go/model/gym_reg_model.dart';
+import 'package:gym_go/model/plan.dart';
+import 'package:gym_go/model/plan_model.dart';
 import 'package:gym_go/model/user.dart';
 import 'package:gym_go/style/text.dart';
 import 'package:gym_go/widget/button/button_next_gym.dart';
@@ -13,12 +15,14 @@ class Detail extends StatefulWidget {
 
 class _DetailState extends State<Detail> {
   final _formKey = GlobalKey<FormState>();
-
+  bool _isAdded = false;
   @override
   Widget build(BuildContext context) {
     GymRegModel gymRegModel = Provider.of(context);
     GymModel gymModel = Provider.of(context);
     UserModel userModel = Provider.of(context);
+    PlanModel planModel = Provider.of(context);
+    print(planModel.listPlan.length);
     return Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -92,26 +96,25 @@ class _DetailState extends State<Detail> {
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
-                                  value: gymRegModel.getGym.plan,
-                                  icon: Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: gymRegModel.getGym.statePlan
-                                        ? Colors.black
-                                        : Colors.transparent,
-                                  ),
-                                  iconSize: 24,
-                                  elevation: 16,
-                                  onChanged: (String newValue) {
-                                    gymRegModel.plan = newValue;
-                                  },
-                                  items: <String>['Basic', 'Medium', 'Premium']
-                                      .map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                ),
+                                    value: gymRegModel.getGym.plan,
+                                    icon: Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: gymRegModel.getGym.statePlan
+                                          ? Colors.black
+                                          : Colors.transparent,
+                                    ),
+                                    iconSize: 24,
+                                    elevation: 16,
+                                    onChanged: (String newValue) {
+                                      gymRegModel.plan = newValue;
+                                    },
+                                    items: [
+                                      for (Plan plan in planModel.listPlan)
+                                        DropdownMenuItem<String>(
+                                          value: plan.plan,
+                                          child: Text(plan.plan),
+                                        )
+                                    ]),
                               ),
                             )
                           ],
@@ -154,46 +157,80 @@ class _DetailState extends State<Detail> {
                               ],
                             ),
                           ),
-                          ButtonNextGym(
-                            color: Colors.blue,
-                            splashColor: Colors.white10,
-                            radius: 30,
-                            onTap: () async {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                try {
-                                  gymModel.addMyGym(
-                                      await gymRegModel.addToGymCollection(
-                                          userId: userModel.getUser().userId));
-                                  Navigator.pop(context);
-                                } catch (e) {
-                                  print('Error' + e);
-                                }
-                              }
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.check,
-                                  color: Colors.white,
+                          Stack(
+                            children: <Widget>[
+                              Align(
+                                alignment: Alignment.center,
+                                child: AnimatedOpacity(
+                                  duration: Duration(milliseconds: 600),
+                                  curve: Curves.easeIn,
+                                  opacity: _isAdded ? 0.0 : 1.0,
+                                  child: ButtonNextGym(
+                                    color: Colors.blue,
+                                    splashColor: Colors.white10,
+                                    radius: 30,
+                                    onTap: () async {
+                                      setState(() {
+                                        _isAdded = true;
+                                      });
+                                      try {
+                                        if (_formKey.currentState.validate()) {
+                                          _formKey.currentState.save();
+                                          try {
+                                            final gym = await gymRegModel
+                                                .addToGymCollection(
+                                                    list: planModel.listPlan,
+                                                    userId: userModel
+                                                        .getUser()
+                                                        .userId);
+                                            gymModel.addMyGym(gym);
+                                            Navigator.pop(context);
+                                          } catch (e) {
+                                            print('Error' + e);
+                                          }
+                                        }
+                                      } catch (e) {
+                                        print('error $e');
+                                        setState(() {
+                                          _isAdded = false;
+                                        });
+                                      }
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          'Finalizar',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14),
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(
-                                  width: 8,
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: AnimatedOpacity(
+                                  duration: Duration(milliseconds: 550),
+                                  opacity: _isAdded ? 1.0 : 0.0,
+                                  child: CircularProgressIndicator(),
                                 ),
-                                Text(
-                                  'Finalizar',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14),
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                              ],
-                            ),
-                          )
+                              )
+                            ],
+                          ),
                         ],
                       )
                     ]))));

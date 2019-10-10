@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:gym_go/class/detail_gym_page_arguments.dart';
 import 'package:gym_go/model/gym_model.dart';
+import 'package:gym_go/model/plan_model.dart';
+import 'package:gym_go/model/suscription_model.dart';
 import 'package:gym_go/model/user.dart';
 import 'package:gym_go/pages/detail_gym/detail_gym_page.dart';
 import 'package:gym_go/pages/gym_registration/gym_registration.dart';
 import 'package:gym_go/pages/gym_registration/pin_in_map.dart';
 import 'package:gym_go/pages/my_gyms_page.dart';
 import 'package:gym_go/pages/profile_page.dart';
+import 'package:gym_go/pages/shopping/shopping.dart';
 import 'package:gym_go/pages/sign_in.dart';
 import 'package:gym_go/pages/sign_up.dart';
 import './pages/tab_bar_page.dart';
 import './pages/root.dart';
 import './pages/splash_sreen.dart';
 import 'package:provider/provider.dart';
+
+import 'class/shopping_page.dart';
 
 class AppMaterialGym extends StatelessWidget {
   @override
@@ -24,16 +29,20 @@ class AppMaterialGym extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           builder: (context) => GymModel(),
-        )
+        ),
+        ChangeNotifierProvider(
+          builder: (context) => PlanModel(),
+        ),
+        ChangeNotifierProvider(
+          builder: (context) => SubscriptionModel(),
+        ),
       ],
       child: MaterialApp(
         onGenerateRoute: _getRoute,
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,
             appBarTheme: AppBarTheme(
-              actionsIconTheme: IconThemeData(
-                color: Color(0xFF0E1D4A)
-              ),
+                actionsIconTheme: IconThemeData(color: Color(0xFF0E1D4A)),
                 elevation: 0,
                 color: Colors.white,
                 textTheme: TextTheme(
@@ -81,6 +90,14 @@ class AppMaterialGym extends StatelessWidget {
         break;
       case '/gymregistration':
         return MaterialPageRoute(builder: (context) => GymRegistration());
+        break;
+      case '/shopping':
+        final ShoppingPageArguments args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (context) => ShoppingPage(
+                  gym: args.gym,
+                  plan: args.plan,
+                ));
         break;
       case '/detailgym':
         final DetailGymPageArguments args = settings.arguments;

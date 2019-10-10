@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_go/model/user.dart';
 import 'package:gym_go/pages/tabs/home.dart';
+import 'package:gym_go/pages/tabs/memberships.dart';
 
 import 'package:gym_go/pages/tabs/menu.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +68,7 @@ class _TabBarPageState extends State<TabBarPage>
           children: <Widget>[
             HomeTab(),
             Icon(Icons.playlist_add_check),
-            Icon(Icons.subscriptions),
+            Memberships(),
             MenuTab(),
           ],
         ),

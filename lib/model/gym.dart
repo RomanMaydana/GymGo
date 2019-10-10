@@ -182,6 +182,8 @@ class Gym {
 
     return gym;
   }
+  String get gymId => _gymId;
+  
   String get userId => _userId;
   set userId(String userId) {
     _userId = userId;

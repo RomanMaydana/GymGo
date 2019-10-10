@@ -43,6 +43,7 @@ class CardListGym extends StatelessWidget {
                       image: DecorationImage(
                           image: NetworkImage(
                             gym.picture[0].url,
+                            
                           ),
                           fit: BoxFit.cover)),
                 ),

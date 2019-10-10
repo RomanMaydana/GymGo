@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_go/model/plan.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:image_picker_modern/image_picker_modern.dart';
@@ -178,12 +179,33 @@ class GymRegModel extends ChangeNotifier {
     }
   }
 
-  Future<Gym> addToGymCollection({String userId}) async {
+  Future<Gym> addToGymCollection({String userId, List<Plan> list}) async {
     _gym.userId = userId;
     Firestore firestore = Firestore.instance;
-    DocumentReference result =
+
+    if (_gym.statePlan) {
+      print('estate activo');
+      String planId = '';
+      for (Plan plan in list) {
+        if (plan.plan == _gym.plan) {
+          planId = plan.planId;
+        }
+      }
+      print(planId);
+      final result = await firestore.collection('Plan').document(planId).get();
+      if (result.exists) {
+        firestore.runTransaction((Transaction t) async {
+          final sfDoc = await t.get(result.reference);
+          if (sfDoc.exists) {
+            final qty = sfDoc.data['qty'] + 1;
+            t.update(sfDoc.reference, {'qty': qty});
+          }
+        });
+      }
+    }
+    DocumentReference resultAdd =
         await firestore.collection('Gym').add(_gym.toMap());
-    result.updateData({'gymId': result.documentID});
+    resultAdd.updateData({'gymId': resultAdd.documentID});
     return _gym;
   }
 
@@ -261,7 +283,7 @@ class GymRegModel extends ChangeNotifier {
 
   set location(LatLng value) {
     this._gym.location = value;
-    
+
     notifyListeners();
   }
 

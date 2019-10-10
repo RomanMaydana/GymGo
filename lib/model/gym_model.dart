@@ -33,6 +33,7 @@ class GymModel extends ChangeNotifier {
 
   addMyGym(Gym gym) {
     myListGyms.add(gym);
+    availableGyms.add(gym);
     notifyListeners();
   }
 
