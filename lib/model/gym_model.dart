@@ -8,7 +8,8 @@ class GymModel extends ChangeNotifier {
   GymModel() {
     this.myListGyms = [];
     this.availableGyms = [];
-    this.getGym();
+    // this.getGym();
+    this.getGymSnapshot();
   }
 
   Future<void> getCollectionMyGym({String userId}) async {
@@ -52,5 +53,22 @@ class GymModel extends ChangeNotifier {
     } catch (e) {
       print('error $e');
     }
+  }
+
+  getGymSnapshot() async {
+    Firestore.instance.collection('Gym').snapshots().listen((snapshot) {
+      snapshot.documentChanges.forEach((DocumentChange doc) {
+        Gym gym = Gym.fromMap(doc.document.data);
+        print(gym.name);
+        
+        this.availableGyms.add(gym);
+        notifyListeners();
+      });
+    });
+  }
+  
+removePro(){
+    this.availableGyms.removeLast();
+    notifyListeners();
   }
 }

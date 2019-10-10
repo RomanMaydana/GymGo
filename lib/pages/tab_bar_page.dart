@@ -67,7 +67,7 @@ class _TabBarPageState extends State<TabBarPage>
           controller: _tabController,
           children: <Widget>[
             HomeTab(),
-            Icon(Icons.playlist_add_check),
+            Center(child: Text('Mis Suscripciones'),),
             Memberships(),
             MenuTab(),
           ],

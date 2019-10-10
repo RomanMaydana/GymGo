@@ -170,20 +170,21 @@ class _DetailState extends State<Detail> {
                                     splashColor: Colors.white10,
                                     radius: 30,
                                     onTap: () async {
-                                      setState(() {
-                                        _isAdded = true;
-                                      });
                                       try {
                                         if (_formKey.currentState.validate()) {
                                           _formKey.currentState.save();
                                           try {
+                                            setState(() {
+                                              _isAdded = true;
+                                            });
                                             final gym = await gymRegModel
                                                 .addToGymCollection(
                                                     list: planModel.listPlan,
                                                     userId: userModel
                                                         .getUser()
                                                         .userId);
-                                            gymModel.addMyGym(gym);
+                                            gymModel.removePro();
+                                            // gymModel.addMyGym(gym);
                                             Navigator.pop(context);
                                           } catch (e) {
                                             print('Error' + e);

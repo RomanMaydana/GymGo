@@ -8,14 +8,15 @@ final Color colorIconStar = Color(0xffFFDB5C);
 
 class CardListGym extends StatelessWidget {
   final Gym gym;
+  final bool subs;
 
-  const CardListGym({Key key, @required this.gym}) : super(key: key);
+  const CardListGym({Key key, @required this.gym, this.subs}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, '/detailgym',
-            arguments: DetailGymPageArguments(gym));
+            arguments: DetailGymPageArguments(gym, subs));
       },
       child: Container(
         padding: EdgeInsets.all(16),
@@ -43,7 +44,6 @@ class CardListGym extends StatelessWidget {
                       image: DecorationImage(
                           image: NetworkImage(
                             gym.picture[0].url,
-                            
                           ),
                           fit: BoxFit.cover)),
                 ),

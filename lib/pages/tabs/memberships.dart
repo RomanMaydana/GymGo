@@ -32,7 +32,7 @@ class Memberships extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(bottom: 32),
                 child: CardListPlan(
-                  height: 200,
+                  height: 300,
                   plan: plan,
                   toBuy: () {
                     Navigator.pushNamed(context, '/shopping', arguments: ShoppingPageArguments(

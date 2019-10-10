@@ -15,8 +15,8 @@ final Color colorIconStar = Color(0xffFFDB5C);
 
 class DetailGym extends StatefulWidget {
   final Gym gym;
-
-  const DetailGym({Key key, this.gym}) : super(key: key);
+  final bool subs;
+  const DetailGym({Key key, this.gym, this.subs}) : super(key: key);
 
   @override
   _DetailGymState createState() => _DetailGymState();
@@ -105,7 +105,9 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
           SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.all(16),
-              child: Column(
+              child: Stack(
+                children: <Widget>[
+                  Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
@@ -148,54 +150,57 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
                         ),
                       ),
                       widget.gym.statePlan
-                      ? Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              '${widget.gym.plan}',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Icon(
-                              Icons.check_circle,
-                              color: Theme.of(context).accentColor,
-                              size: 20,
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  '${widget.gym.plan}',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Theme.of(context).accentColor,
+                                  size: 20,
+                                )
+                              ],
                             )
-                          ],
-                        )
-                      : Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              '${widget.gym.plan}',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Icon(
-                              Icons.close,
-                              color: Theme.of(context).accentColor,
-                              size: 20,
+                          : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  '${widget.gym.plan}',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Icon(
+                                  Icons.close,
+                                  color: Theme.of(context).accentColor,
+                                  size: 20,
+                                )
+                              ],
                             )
-                          ],
-                        )                    ],
+                    ],
                   ),
                   SizedBox(
                     height: 8,
                   ),
                   for (Schedule schedule in widget.gym.schedule)
-              _buildScheduleConfig(schedule),
+                    _buildScheduleConfig(schedule),
                 ],
               ),
+                ],
+              )
             ),
           ),
           SliverPersistentHeader(
@@ -225,9 +230,7 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
           Information(
             gym: widget.gym,
           ),
-          Reviews(
-            gym: widget.gym
-          )
+          Reviews(gym: widget.gym)
         ],
       ),
     );
@@ -259,7 +262,7 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
       sizeIcon: sizeIconStar,
     );
   }
-  
+
   Widget _buildScheduleConfig(Schedule schedule) {
     int index = widget.gym.schedule.indexOf(schedule);
     return Column(
@@ -278,8 +281,6 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
         SizedBox(
           height: 4,
         ),
-        
-        
       ],
     );
   }
@@ -309,7 +310,6 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
       ),
     );
   }
-
 }
 
 class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

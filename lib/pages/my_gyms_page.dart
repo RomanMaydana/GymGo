@@ -78,9 +78,9 @@ class MyGymsPage extends StatelessWidget {
               ),
               for (Gym gym in gymModel.myListGyms)
                 GestureDetector(
-                  onTap: () { 
+                  onTap: () {
                     Navigator.pushNamed(context, '/detailgym',
-                        arguments: DetailGymPageArguments(gym));
+                        arguments: DetailGymPageArguments(gym, false));
                   },
                   child: Container(
                     margin: EdgeInsets.only(bottom: 16),

@@ -104,6 +104,7 @@ class AppMaterialGym extends StatelessWidget {
         return MaterialPageRoute(
             builder: (context) => DetailGymPage(
                   gym: args.gym,
+                  subs: args.subs,
                 ));
         break;
       case '/pininmap':

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_go/model/suscription_model.dart';
 import 'package:gym_go/pages/tab_bar_page.dart';
 import 'package:gym_go/pages/sign_in.dart';
 import 'package:gym_go/pages/sign_up.dart';
@@ -22,6 +23,7 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of(context);
+    
     switch(userModel.statusAuth){
       case AuthStatus.logged_in:
         return TabBarPage();

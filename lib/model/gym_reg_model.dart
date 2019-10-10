@@ -230,6 +230,7 @@ class GymRegModel extends ChangeNotifier {
     this._gym.name = value;
     notifyListeners();
   }
+  
 
   set picture(List<Picture> value) {
     this._gym.picture = value;
