@@ -58,6 +58,7 @@ class Gym {
   String _phone;
   double _rating;
   bool _state;
+  bool _stateVerify;
 
   String _pais;
   String _city;
@@ -86,6 +87,7 @@ class Gym {
       String phone = '',
       double rating = 4,
       bool state = true,
+      bool stateVerify = false,
       String pais = 'Bolivia',
       String city = 'La Paz',
       String internationalCode = '+591',
@@ -106,7 +108,7 @@ class Gym {
     this._phone = phone;
     this._rating = rating;
     this._state = state;
-
+    this._stateVerify = stateVerify;
     this._pais = pais;
     this._city = city;
     this._internationalCode = internationalCode;
@@ -135,6 +137,7 @@ class Gym {
       'phone': this._phone,
       'rating': this._rating,
       'state': this._state,
+      'stateVerify': this._stateVerify,
       'pais': this._pais,
       'city': this._city,
       'internationalCode': this._internationalCode,
@@ -149,11 +152,11 @@ class Gym {
       'statePlan': this._statePlan,
       'creationTime': DateTime.now(),
       'userId': this._userId,
+      'gymId': this._gymId
     };
   }
 
   factory Gym.fromMap(Map doc) {
-    
     Gym gym = Gym(
         name: doc['name'],
         picture: (doc['picture'] as List)
@@ -162,12 +165,13 @@ class Gym {
         phone: doc['phone'],
         rating: doc['rating'].toDouble(),
         state: doc['state'],
+        stateVerify: doc['stateVerify'] ?? true,
         pais: doc['pais'],
         city: doc['city'],
         internationalCode: doc['internationalCode'],
         zone: doc['zone'],
         streetOrAvenue: doc['streetOrAvenue'],
-        location: LatLng(doc['location'].latitude,doc['location'].longitude),
+        location: LatLng(doc['location'].latitude, doc['location'].longitude),
         service: doc['service'].cast<String>().toSet(),
         classes: doc['classes'].cast<String>().toSet(),
         schedule: (doc['schedule'] as List)
@@ -183,7 +187,7 @@ class Gym {
     return gym;
   }
   String get gymId => _gymId;
-  
+
   String get userId => _userId;
   set userId(String userId) {
     _userId = userId;
@@ -239,6 +243,11 @@ class Gym {
     _state = value;
   }
 
+  bool get stateVerify => _stateVerify;
+  set stateVerify(bool value) {
+    _stateVerify = value;
+  }
+
   String get pais => _pais;
 
   set pais(String value) {
@@ -278,7 +287,6 @@ class Gym {
   LatLng get location => _location;
 
   set location(LatLng value) {
-   
     _location = value;
   }
 

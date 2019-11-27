@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
@@ -68,6 +69,8 @@ class UserModel extends ChangeNotifier {
   AuthStatus _authStatus;
   Position _position;
   User _user;
+  TabController _tabController;
+
   UserModel() {
     _authStatus = AuthStatus.sign_in;
     getPosition();
@@ -81,21 +84,43 @@ class UserModel extends ChangeNotifier {
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
+  registrationTacontroller({TabController controller}){
+    this._tabController = controller;
+   
+    // this._tabController.addListener((){
+       
+    //   toIndexInTabView(this._tabController.index);
+      
+    // });
+  }
+  toIndexInTabView(int index){
+    this._tabController
+      .animateTo(index,
+          duration: Duration(milliseconds: 700), curve: Curves.ease);
+    notifyListeners();
+  }
+  getTabController(){
+    return _tabController;
+  }
   getCurrentLocation() {
     return LatLng(_position.latitude, _position.longitude);
   }
 
   Future<void> _getUserFirebase(FirebaseUser newUser) async {
     if (newUser != null) {
-      var docUser = await Firestore.instance
-          .collection('user')
-          .document(newUser.uid.toString())
-          .get();
-      this._user = User.fromMap(docUser.data);
-      print(this._user.fullName);
-      _authStatus = AuthStatus.logged_in;
-      userFirebase = newUser;
-      notifyListeners();
+      try {
+        var docUser = await Firestore.instance
+            .collection('user')
+            .document(newUser.uid.toString())
+            .get();
+        this._user = User.fromMap(docUser.data);
+        print(this._user.fullName);
+        _authStatus = AuthStatus.logged_in;
+        userFirebase = newUser;
+        notifyListeners();
+      } catch (e) {
+        print('error $e');
+      }
     }
   }
 

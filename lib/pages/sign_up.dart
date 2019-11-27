@@ -16,7 +16,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-  
+
   String _name;
   String _email;
   String _password;
@@ -36,7 +36,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           BorderSide(color: Colors.white, width: 0.3)))),
           child: SingleChildScrollView(
               child: Form(
-                key: _formKey,
+            key: _formKey,
             child: Stack(
               children: <Widget>[
                 ClipPath(
@@ -82,7 +82,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               }
                               return null;
                             },
-                            onSaved: (name)=>_name = name,
+                            onSaved: (name) => _name = name,
                           ),
                           SizedBox(
                             height: 32,
@@ -95,7 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               }
                               return null;
                             },
-                            onSaved: (email)=> _email = email,
+                            onSaved: (email) => _email = email,
                           ),
                           SizedBox(
                             height: 32,
@@ -108,7 +108,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               }
                               return null;
                             },
-                            onSaved: (password)=> _password = password,
+                            onSaved: (password) => _password = password,
                           ),
                           SizedBox(
                             height: 60,
@@ -120,13 +120,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                 'Registrar',
                                 style: StylesText.loginIntoWhite,
                               ),
-                               IconButton(
+                              IconButton(
                                 iconSize: 60,
                                 onPressed: () {
-                                  if(_formKey.currentState.validate()){
+                                  if (_formKey.currentState.validate()) {
                                     _formKey.currentState.save();
-
-                                    userModel.signUp(_email,_password, _name);
+                                   
+                                    userModel.signUp(_email, _password, _name);
                                   }
                                 },
                                 icon: CircleAvatar(

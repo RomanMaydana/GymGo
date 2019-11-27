@@ -10,20 +10,15 @@ class AvailibleGymsInList extends StatelessWidget {
   Widget build(BuildContext context) {
     GymModel gymModel = Provider.of(context);
     SubscriptionModel subscriptionModel = Provider.of(context);
-    return Column(
-      children: <Widget>[
-        for (Gym gym in gymModel.availableGyms)
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-            child: CardListGym(
-                gym: gym,
-                subs: gym.statePlan
-                    ? subscriptionModel.availableSubs.length > 0
-                        ? subscriptionModel.availableSubs[0].plan == gym.plan
-                        : false
-                    : false),
-          )
-      ],
+    return _buildList(context, gymModel.availableGyms);
+
+    
+  }
+
+  Widget _buildList(BuildContext context, List<Gym> availableGyms) {
+    return ListView(
+      padding: const EdgeInsets.only(top: 8.0),
+      children: availableGyms.map((data) => CardListGym(gym: data, subs: true),).toList(),
     );
   }
 }

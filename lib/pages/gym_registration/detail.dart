@@ -9,6 +9,9 @@ import 'package:gym_go/widget/button/button_next_gym.dart';
 import 'package:provider/provider.dart';
 
 class Detail extends StatefulWidget {
+  final bool edit;
+
+  const Detail({Key key, this.edit = false}) : super(key: key);
   @override
   _DetailState createState() => _DetailState();
 }
@@ -20,6 +23,7 @@ class _DetailState extends State<Detail> {
   Widget build(BuildContext context) {
     GymRegModel gymRegModel = Provider.of(context);
     GymModel gymModel = Provider.of(context);
+
     UserModel userModel = Provider.of(context);
     PlanModel planModel = Provider.of(context);
     print(planModel.listPlan.length);
@@ -177,13 +181,22 @@ class _DetailState extends State<Detail> {
                                             setState(() {
                                               _isAdded = true;
                                             });
-                                            final gym = await gymRegModel
-                                                .addToGymCollection(
-                                                    list: planModel.listPlan,
-                                                    userId: userModel
-                                                        .getUser()
-                                                        .userId);
-                                            gymModel.removePro();
+
+                                            print('esta  ${widget.edit}');
+                                            if (widget.edit == true) {
+                                              print('esta entrando');
+                                              await gymRegModel.editGym();
+                                            } else {
+                                              final gym = await gymRegModel
+                                                  .addToGymCollection(
+                                                      list: planModel.listPlan,
+                                                      userId: userModel
+                                                          .getUser()
+                                                          .userId);
+                                            }
+                                            await gymModel.getCollectionMyGym(
+                                                userId:
+                                                    userModel.getUser().userId);
                                             // gymModel.addMyGym(gym);
                                             Navigator.pop(context);
                                           } catch (e) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_go/colors.dart';
+import 'package:gym_go/model/gym.dart';
 import 'package:gym_go/model/gym_reg_model.dart';
 import 'package:gym_go/model/user.dart';
 import 'package:gym_go/pages/gym_registration/detail.dart';
@@ -10,6 +11,9 @@ import 'package:gym_go/widget/nav_bar_registrarion_gym.dart';
 import 'package:provider/provider.dart';
 
 class GymRegistration extends StatefulWidget {
+  final Gym gym;
+
+  const GymRegistration({Key key, this.gym}) : super(key: key);
   @override
   _GymRegistrationState createState() => _GymRegistrationState();
 }
@@ -23,11 +27,19 @@ class _GymRegistrationState extends State<GymRegistration>
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of(context);
+    
     return ChangeNotifierProvider(
-      builder: (_) =>
-          GymRegModel(vsync: this, userId: userModel.getUser().userId)
-            ..location = userModel.getCurrentLocation(),
+      builder: (_) {
+        if (widget.gym == null)
+          return GymRegModel(vsync: this, userId: userModel.getUser().userId)
+            ..location = userModel.getCurrentLocation();
+        else {
+          return GymRegModel(
+              vsync: this, userId: userModel.getUser().userId, gym: widget.gym);
+        }
+      },
       child: Consumer<GymRegModel>(builder: (_, gymModel, child) {
+        final edit = widget.gym == null ? false : true;
         return Theme(
           data: Theme.of(context).copyWith(
               inputDecorationTheme: InputDecorationTheme(
@@ -46,7 +58,7 @@ class _GymRegistrationState extends State<GymRegistration>
             initialIndex: 0,
             child: Scaffold(
               appBar: AppBar(
-                title: Text('Agregar Gimnasio'),
+                title: Text(!edit?'Agregar Gimnasio':'Editando ${gymModel.getGym.name}'),
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(48.0),
                   child: NavBarRegistrationGym(
@@ -80,7 +92,9 @@ class _GymRegistrationState extends State<GymRegistration>
                   GeneralData(),
                   Direction(),
                   Offer(),
-                  Detail()
+                  Detail(
+                    edit: edit,
+                  )
                 ],
               ),
             ),

@@ -3,7 +3,7 @@ class Subscripcion {
   DateTime finalSubscription;
   DateTime creationDate;
   String idSubscription;
-  String igGym;
+  String gymId;
   String nameGym;
   String idUser;
   String nameUser;
@@ -17,13 +17,13 @@ class Subscripcion {
       DateTime finalSubscription,
       this.creationDate,
       this.idSubscription = '',
-      this.igGym = '',
-      this.nameGym = '',
+      this.gymId,
+      this.nameGym,
       this.idUser = '',
       this.nameUser = '',
       this.price = 0,
       this.months = 1,
-      this.plan = '',
+      this.plan,
       this.stateSubscription = true}) {
     this.initSubscription = initSubscription ?? DateTime.now();
     this.finalSubscription =
@@ -37,7 +37,7 @@ class Subscripcion {
       'finalSubscription': this.finalSubscription,
       'creationDate': DateTime.now(),
       'idSubscription': this.idSubscription,
-      'igGym': this.igGym,
+      'gymId': this.gymId,
       'nameGym': this.nameGym,
       'idUser': this.idUser,
       'nameUser': this.nameUser,
@@ -54,7 +54,7 @@ class Subscripcion {
         finalSubscription: doc['finalSubscription'].toDate(),
         creationDate: doc['creationDate'].toDate(),
         idSubscription: doc['idSubscription'],
-        igGym: doc['igGym'],
+        gymId: doc['gymId'],
         nameGym: doc['nameGym'],
         idUser: doc['idUser'],
         nameUser: doc['nameUser'],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_go/class/detail_gym_page_arguments.dart';
+import 'package:gym_go/class/gym_registration.dart';
 import 'package:gym_go/model/gym.dart';
 import 'package:gym_go/model/gym_model.dart';
 import 'package:gym_go/style/text.dart';
@@ -30,7 +31,8 @@ class MyGymsPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context).pushNamed('/gymregistration');
+                      Navigator.of(context).pushNamed('/gymregistration',
+                          arguments: GymRegistrationArguments());
                     },
                     borderRadius: BorderRadius.circular(25),
                     child: Container(
@@ -86,19 +88,22 @@ class MyGymsPage extends StatelessWidget {
                     margin: EdgeInsets.only(bottom: 16),
                     child: Row(
                       children: <Widget>[
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(gym.picture[0].url),
-                                fit: BoxFit.cover,
-                                repeat: ImageRepeat.noRepeat,
-                                alignment: Alignment.center,
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                              border:
-                                  Border.all(width: 1, color: Colors.black26)),
+                        Hero(
+                          tag: 'gym${gym.gymId}',
+                                                  child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(gym.picture[0].url),
+                                  fit: BoxFit.cover,
+                                  repeat: ImageRepeat.noRepeat,
+                                  alignment: Alignment.center,
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                                border:
+                                    Border.all(width: 1, color: Colors.black26)),
+                          ),
                         ),
                         SizedBox(
                           width: 16,
@@ -106,6 +111,20 @@ class MyGymsPage extends StatelessWidget {
                         Text(
                           gym.name,
                           style: StylesText.textBlack16w700,
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: Text(
+                            gym.stateVerify ? 'Verificado' : 'Sin Verificar',
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                color:
+                                    gym.stateVerify ? Colors.green : Colors.red,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w400),
+                          ),
                         )
                       ],
                     ),

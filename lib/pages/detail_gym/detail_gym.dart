@@ -55,10 +55,7 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
     super.initState();
   }
 
-  bool get _changecolor {
-    return _scrollController.hasClients &&
-        _scrollController.offset > (200 - kToolbarHeight);
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +70,7 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
             title: Text(
               widget.gym.name,
               style: TextStyle(
-                color: _changecolor ? Colors.black : Colors.transparent,
+                color:Colors.black
               ),
             ),
             expandedHeight: 220.0,
@@ -83,22 +80,25 @@ class _DetailGymState extends State<DetailGym> with TickerProviderStateMixin {
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               background: SizedBox(
-                child: Carousel(
-                    // boxFit: BoxFit.fill,
-                    // animationDuration: Duration(milliseconds: 1500),
-                    autoplay: false,
-                    dotSize: 4.0,
-                    dotSpacing: 15.0,
-                    dotColor: Colors.white,
-                    indicatorBgPadding: 20.0,
-                    dotBgColor: Colors.transparent,
-                    borderRadius: true,
-                    images: widget.gym.picture
-                        .map((pic) => Image.network(
-                              pic.url,
-                              fit: BoxFit.cover,
-                            ))
-                        .toList()),
+                child: Hero(
+                  tag: 'gym${widget.gym.gymId}',
+                                  child: Carousel(
+                      // boxFit: BoxFit.fill,
+                      // animationDuration: Duration(milliseconds: 1500),
+                      autoplay: false,
+                      dotSize: 4.0,
+                      dotSpacing: 15.0,
+                      dotColor: Colors.white,
+                      indicatorBgPadding: 20.0,
+                      dotBgColor: Colors.transparent,
+                      borderRadius: true,
+                      images: widget.gym.picture
+                          .map((pic) => Image.network(
+                                pic.url,
+                                fit: BoxFit.cover,
+                              ))
+                          .toList()),
+                ),
               ),
             ),
           ),

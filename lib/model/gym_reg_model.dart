@@ -29,8 +29,8 @@ class GymRegModel extends ChangeNotifier {
     'domingo'
   ];
   Set<String> _setDay;
-  GymRegModel({TickerProvider vsync, String userId}) {
-    this._gym = Gym();
+  GymRegModel({TickerProvider vsync, String userId, Gym gym}) {
+    this._gym = gym ?? Gym();
     /* list, what offers?*/
     this._listClasses = Set<String>();
     this._listServices = [];
@@ -179,6 +179,16 @@ class GymRegModel extends ChangeNotifier {
     }
   }
 
+  Future<Gym> editGym() async {
+    this._gym.stateVerify = false;
+    print('gym id  ${this._gym.gymId}');
+    await Firestore.instance
+        .collection('Gym')
+        .document(this._gym.gymId)
+        .setData(this._gym.toMap());
+    return this._gym;
+  }
+
   Future<Gym> addToGymCollection({String userId, List<Plan> list}) async {
     _gym.userId = userId;
     Firestore firestore = Firestore.instance;
@@ -198,14 +208,14 @@ class GymRegModel extends ChangeNotifier {
           final sfDoc = await t.get(result.reference);
           if (sfDoc.exists) {
             final qty = sfDoc.data['qty'] + 1;
-            t.update(sfDoc.reference, {'qty': qty});
+            await t.update(sfDoc.reference, {'qty': qty});
           }
         });
       }
     }
     DocumentReference resultAdd =
         await firestore.collection('Gym').add(_gym.toMap());
-    resultAdd.updateData({'gymId': resultAdd.documentID});
+    await resultAdd.updateData({'gymId': resultAdd.documentID});
     return _gym;
   }
 
@@ -230,7 +240,6 @@ class GymRegModel extends ChangeNotifier {
     this._gym.name = value;
     notifyListeners();
   }
-  
 
   set picture(List<Picture> value) {
     this._gym.picture = value;

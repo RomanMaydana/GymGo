@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gym_go/class/detail_gym_page_arguments.dart';
+import 'package:gym_go/class/gym_registration.dart';
 import 'package:gym_go/model/gym_model.dart';
 import 'package:gym_go/model/plan_model.dart';
 import 'package:gym_go/model/suscription_model.dart';
 import 'package:gym_go/model/user.dart';
+import 'package:gym_go/pages/check_in/list_of_check_in.dart';
 import 'package:gym_go/pages/detail_gym/detail_gym_page.dart';
 import 'package:gym_go/pages/gym_registration/gym_registration.dart';
 import 'package:gym_go/pages/gym_registration/pin_in_map.dart';
@@ -17,6 +19,7 @@ import './pages/root.dart';
 import './pages/splash_sreen.dart';
 import 'package:provider/provider.dart';
 
+import 'class/my_check_in_argument.dart';
 import 'class/shopping_page.dart';
 
 class AppMaterialGym extends StatelessWidget {
@@ -89,7 +92,11 @@ class AppMaterialGym extends StatelessWidget {
         return MaterialPageRoute(builder: (context) => MyGymsPage());
         break;
       case '/gymregistration':
-        return MaterialPageRoute(builder: (context) => GymRegistration());
+        final GymRegistrationArguments args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (context) => GymRegistration(
+                  gym: args.gym,
+                ));
         break;
       case '/shopping':
         final ShoppingPageArguments args = settings.arguments;
@@ -97,6 +104,21 @@ class AppMaterialGym extends StatelessWidget {
             builder: (context) => ShoppingPage(
                   gym: args.gym,
                   plan: args.plan,
+                ));
+        break;
+      case '/checkin':
+        final ShoppingPageArguments args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (context) => ShoppingPage(
+                  gym: args.gym,
+                  plan: args.plan,
+                ));
+        break;
+      case '/mycheckin':
+        final MyCheckInArgument args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (context) => ListOfCheckIn(
+                  userId: args.userId,
                 ));
         break;
       case '/detailgym':

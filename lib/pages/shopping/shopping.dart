@@ -28,7 +28,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
         widget.plan != null ? widget.plan.plan : 'Sin Plan';
     subscriptionModel.subscripcion.idUser = userModel.getUser().userId;
     subscriptionModel.subscripcion.nameUser = userModel.getUser().fullName;
-    subscriptionModel.subscripcion.igGym =
+    subscriptionModel.subscripcion.gymId =
         widget.plan != null ? '' : widget.gym.gymId;
     subscriptionModel.subscripcion.nameGym =
         widget.plan != null ? '' : widget.gym.name;

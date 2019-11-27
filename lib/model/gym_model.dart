@@ -8,8 +8,8 @@ class GymModel extends ChangeNotifier {
   GymModel() {
     this.myListGyms = [];
     this.availableGyms = [];
-    // this.getGym();
-    this.getGymSnapshot();
+    this.getGym();
+    // this.getGymSnapshot();
   }
 
   Future<void> getCollectionMyGym({String userId}) async {
@@ -41,13 +41,18 @@ class GymModel extends ChangeNotifier {
   Future<void> getGym() async {
     try {
       List<Gym> list = [];
-      QuerySnapshot snapshot =
-          await Firestore.instance.collection('Gym').getDocuments();
+      QuerySnapshot snapshot = await Firestore.instance
+          .collection('Gym')
+          .where('state', isEqualTo: true)
+          .where('stateVerify', isEqualTo: true)
+          .getDocuments();
 
       snapshot.documentChanges.forEach((DocumentChange doc) {
         Gym gym = Gym.fromMap(doc.document.data);
+        print(gym.gymId);
         list.add(gym);
       });
+      
       this.availableGyms = list;
       notifyListeners();
     } catch (e) {
@@ -60,14 +65,14 @@ class GymModel extends ChangeNotifier {
       snapshot.documentChanges.forEach((DocumentChange doc) {
         Gym gym = Gym.fromMap(doc.document.data);
         print(gym.name);
-        
+
         this.availableGyms.add(gym);
         notifyListeners();
       });
     });
   }
-  
-removePro(){
+
+  removePro() {
     this.availableGyms.removeLast();
     notifyListeners();
   }

@@ -89,6 +89,19 @@ class MenuTab extends StatelessWidget {
                 child: Icon(Icons.fitness_center),
               ),
               title: Text('Mis Gimnasios'),
+            ),
+            ListTile(
+              onTap: () {
+                userModel.toIndexInTabView(1);
+              },
+              leading: CircleAvatar(
+                backgroundColor: Colors.green,
+                child: Icon(
+                  Icons.playlist_add_check,
+                  color: Colors.white,
+                ),
+              ),
+              title: Text('Mis Suscripciones'),
             )
           ],
         ),
