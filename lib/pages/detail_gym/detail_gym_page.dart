@@ -73,7 +73,7 @@ class DetailGymPage extends StatelessWidget {
   }
 
   Widget _buildFab(BuildContext context) {
-    final icons = [Icons.playlist_add_check, Icons.open_in_new, Icons.edit];
+    final icons = [Icons.playlist_add_check, Icons.transit_enterexit, Icons.edit];
     return AnchoredOverlay(
       showOverlay: true,
       overlayBuilder: (context, offset) {

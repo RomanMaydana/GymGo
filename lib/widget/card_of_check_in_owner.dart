@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gym_go/model/check_in.dart';
 
-class CardOfCheckIn extends StatelessWidget {
+class CardOfCheckInOwner extends StatelessWidget {
   final Function onTap;
   final CheckIn checkIn;
-  const CardOfCheckIn({Key key, @required this.onTap, @required this.checkIn})
+  const CardOfCheckInOwner(
+      {Key key, @required this.onTap, @required this.checkIn})
       : super(key: key);
 
   @override
@@ -23,7 +24,8 @@ class CardOfCheckIn extends StatelessWidget {
                   border: Border.all(
                       color: !checkIn.stateCheckIn
                           ? Colors.transparent
-                          : Colors.green ,width: 0.3),
+                          : Colors.green,
+                      width: 0.3),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(radius),
                       bottomLeft: Radius.circular(radius),
@@ -43,7 +45,7 @@ class CardOfCheckIn extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
-                    checkIn.nameGym,
+                    checkIn.nameUser,
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -73,27 +75,27 @@ class CardOfCheckIn extends StatelessWidget {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: !checkIn.stateCheckIn ? onTap : () {},
-            child: Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: checkIn.stateCheckIn
-                    ? Colors.green
-                    : Theme.of(context).accentColor,
-                borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(radius),
-                    topRight: Radius.circular(radius)),
-              ),
-              child: RotatedBox(
-                quarterTurns: 45,
-                child: Text(
-                  checkIn.stateCheckIn ? 'Check In' : 'Cancelar',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
-            ),
-          )
+          !checkIn.stateCheckIn
+              ? GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(radius),
+                          topRight: Radius.circular(radius)),
+                    ),
+                    child: RotatedBox(
+                      quarterTurns: 45,
+                      child: Text(
+                        'Check In',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                )
+              : Container()
         ],
       ),
     );

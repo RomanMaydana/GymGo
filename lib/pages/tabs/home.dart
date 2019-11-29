@@ -19,37 +19,120 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     GymModel gymModel = Provider.of(context);
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('GymGo'),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.tune),
-              onPressed: (){
-                
-              },
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _listState = !_listState;
-                });
-              },
-              icon: SvgPicture.asset(
-                'images/pin.svg',
-                height: 20,
-                color: _listState ? Colors.black26 : null,
+    return Stack(
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                color: Theme.of(context).primaryColor,
               ),
             )
           ],
         ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await gymModel.getGym();
-          },
-          child: _listState ? AvailibleGymsInList() : AvailibleGymsInMaps(),
-        ));
+        Positioned(
+          left: -100,
+          top: -100,
+          child: Container(
+            height: 200,
+            width: 200,
+            decoration: BoxDecoration(
+                color: Theme.of(context).accentColor,
+                borderRadius: BorderRadius.circular(100)),
+          ),
+        ),
+        Positioned(
+          right: -50,
+          top: -50,
+          child: Container(
+            height: 260,
+            width: 260,
+            decoration: BoxDecoration(
+                color: Theme.of(context).accentColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(130)),
+          ),
+        ),
+        Positioned(
+          right: 50,
+          top: -40,
+          child: Container(
+            height: 120,
+            width: 120,
+            decoration: BoxDecoration(
+                color: Theme.of(context).accentColor.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(60)),
+          ),
+        ),
+        Positioned(
+          right: 40,
+          top: -20,
+          child: Container(
+            height: 80,
+            width: 80,
+            decoration: BoxDecoration(
+                color: Theme.of(context).accentColor,
+                borderRadius: BorderRadius.circular(40)),
+          ),
+        ),
+        Column(
+          children: <Widget>[
+            Container(
+                height: 120,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'Gym Go',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ),
+                    CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _listState = !_listState;
+                          });
+                        },
+                        icon: SvgPicture.asset(
+                          'images/pin.svg',
+                          height: 20,
+                          color: _listState ? Colors.black26 : null,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 16,
+                    )
+                  ],
+                )),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(top: 16),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))),
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await gymModel.getGym();
+                  },
+                  child: _listState
+                      ? AvailibleGymsInList()
+                      : AvailibleGymsInMaps(),
+                ),
+              ),
+            )
+          ],
+        ),
+      ],
+    );
   }
 
   @override

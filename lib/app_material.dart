@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gym_go/class/detail_gym_page_arguments.dart';
 import 'package:gym_go/class/gym_registration.dart';
+import 'package:gym_go/class/message_check_in_args.dart';
 import 'package:gym_go/model/gym_model.dart';
 import 'package:gym_go/model/plan_model.dart';
+import 'package:gym_go/model/push_notification_provider.dart';
 import 'package:gym_go/model/suscription_model.dart';
 import 'package:gym_go/model/user.dart';
 import 'package:gym_go/pages/check_in/list_of_check_in.dart';
 import 'package:gym_go/pages/detail_gym/detail_gym_page.dart';
 import 'package:gym_go/pages/gym_registration/gym_registration.dart';
 import 'package:gym_go/pages/gym_registration/pin_in_map.dart';
+import 'package:gym_go/pages/messages/message_check_in.dart';
+import 'package:gym_go/pages/messages/message_suscription.dart';
 import 'package:gym_go/pages/my_gyms_page.dart';
 import 'package:gym_go/pages/profile_page.dart';
 import 'package:gym_go/pages/shopping/shopping.dart';
@@ -22,7 +26,43 @@ import 'package:provider/provider.dart';
 import 'class/my_check_in_argument.dart';
 import 'class/shopping_page.dart';
 
-class AppMaterialGym extends StatelessWidget {
+class AppMaterialGym extends StatefulWidget {
+  @override
+  _AppMaterialGymState createState() => _AppMaterialGymState();
+}
+
+class _AppMaterialGymState extends State<AppMaterialGym> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  @override
+  void initState() {
+    final pushProvider = PushNotificationProvider();
+    pushProvider.initNotificacion();
+    pushProvider.mensajes.listen((data) {
+      print('Argumentos del push');
+      print(data);
+      switch (data['type']) {
+        case 'checkIn':
+          final MessageCheckInArgs messageCheckInArgs = MessageCheckInArgs(
+              id: data['id'], picture: data['piture'] ?? null);
+          navigatorKey.currentState
+              .pushNamed('/mensajecheckin', arguments: messageCheckInArgs);
+          break;
+        case 'gymsucces':
+          navigatorKey.currentState.pushNamed('/mygyms');
+          break;
+        case 'subscription':
+          navigatorKey.currentState.push(MaterialPageRoute(
+              builder: (context) => MessageSuscription(
+                    id: data['id'],
+                  )));
+          break;
+        default:
+          break;
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -41,7 +81,9 @@ class AppMaterialGym extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         onGenerateRoute: _getRoute,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,
             appBarTheme: AppBarTheme(
@@ -78,6 +120,14 @@ class AppMaterialGym extends StatelessWidget {
         break;
       case '/root':
         return MaterialPageRoute(builder: (context) => RootPage());
+        break;
+      case '/mensajecheckin':
+        final MessageCheckInArgs args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (context) => MessageCheckIn(
+                  id: args.id,
+                  picture: args.picture,
+                ));
         break;
       case '/signIn':
         return MaterialPageRoute(builder: (context) => SignInPage());

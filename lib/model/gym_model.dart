@@ -49,7 +49,7 @@ class GymModel extends ChangeNotifier {
 
       snapshot.documentChanges.forEach((DocumentChange doc) {
         Gym gym = Gym.fromMap(doc.document.data);
-        print(gym.gymId);
+        
         list.add(gym);
       });
       
@@ -64,7 +64,7 @@ class GymModel extends ChangeNotifier {
     Firestore.instance.collection('Gym').snapshots().listen((snapshot) {
       snapshot.documentChanges.forEach((DocumentChange doc) {
         Gym gym = Gym.fromMap(doc.document.data);
-        print(gym.name);
+        
 
         this.availableGyms.add(gym);
         notifyListeners();

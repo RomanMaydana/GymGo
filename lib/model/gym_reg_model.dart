@@ -181,7 +181,7 @@ class GymRegModel extends ChangeNotifier {
 
   Future<Gym> editGym() async {
     this._gym.stateVerify = false;
-    print('gym id  ${this._gym.gymId}');
+    
     await Firestore.instance
         .collection('Gym')
         .document(this._gym.gymId)
@@ -194,14 +194,14 @@ class GymRegModel extends ChangeNotifier {
     Firestore firestore = Firestore.instance;
 
     if (_gym.statePlan) {
-      print('estate activo');
+      
       String planId = '';
       for (Plan plan in list) {
         if (plan.plan == _gym.plan) {
           planId = plan.planId;
         }
       }
-      print(planId);
+      
       final result = await firestore.collection('Plan').document(planId).get();
       if (result.exists) {
         firestore.runTransaction((Transaction t) async {

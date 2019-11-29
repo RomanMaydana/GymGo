@@ -8,6 +8,7 @@ import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 enum AuthStatus { sign_in, sign_up, logged_in }
 
@@ -21,8 +22,10 @@ class User {
   final String celular;
   final String type;
   final String sexo;
+  final String token;
   User(
-      {this.fullName,
+      {this.token,
+      this.fullName,
       this.userId,
       this.ci,
       this.birthDate,
@@ -42,7 +45,8 @@ class User {
         email: doc['email'],
         celular: doc['celular'],
         sexo: doc['sexo'],
-        type: doc['type']);
+        type: doc['type'],
+        token: doc['token']);
     return user;
   }
   Map<String, dynamic> toMap() {
@@ -55,7 +59,8 @@ class User {
       'picture': this.picture,
       'celular': this.celular,
       'sexo': this.sexo,
-      'type': this.type
+      'type': this.type,
+      'token': this.token
     };
   }
 
@@ -70,9 +75,11 @@ class UserModel extends ChangeNotifier {
   Position _position;
   User _user;
   TabController _tabController;
-
+  FirebaseMessaging _firebaseMessaging;
   UserModel() {
     _authStatus = AuthStatus.sign_in;
+    _firebaseMessaging = FirebaseMessaging();
+
     getPosition();
     userAuthSub = FirebaseAuth.instance.onAuthStateChanged
         .listen(_getUserFirebase, onError: (e) {
@@ -84,24 +91,26 @@ class UserModel extends ChangeNotifier {
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
-  registrationTacontroller({TabController controller}){
+  registrationTacontroller({TabController controller}) {
     this._tabController = controller;
-   
+
     // this._tabController.addListener((){
-       
+
     //   toIndexInTabView(this._tabController.index);
-      
+
     // });
   }
-  toIndexInTabView(int index){
-    this._tabController
-      .animateTo(index,
-          duration: Duration(milliseconds: 700), curve: Curves.ease);
+
+  toIndexInTabView(int index) {
+    this._tabController.animateTo(index,
+        duration: Duration(milliseconds: 700), curve: Curves.ease);
     notifyListeners();
   }
-  getTabController(){
+
+  getTabController() {
     return _tabController;
   }
+
   getCurrentLocation() {
     return LatLng(_position.latitude, _position.longitude);
   }
@@ -114,7 +123,7 @@ class UserModel extends ChangeNotifier {
             .document(newUser.uid.toString())
             .get();
         this._user = User.fromMap(docUser.data);
-        print(this._user.fullName);
+
         _authStatus = AuthStatus.logged_in;
         userFirebase = newUser;
         notifyListeners();
@@ -137,17 +146,29 @@ class UserModel extends ChangeNotifier {
     return _authStatus;
   }
 
-  void signIn(String email, String password) {
-    print('entro');
-    FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((e) {
-      print(e);
-    }).catchError((e) {
+  Future<String> getToken() async {
+    String token = await _firebaseMessaging.getToken();
+    print('======== TOKEN =========');
+    print(token);
+    // e2p6qS7Qvng:APA91bEDPqBoPBjaXPpN7JPLRvnZdEb0RTGBjFww7wWUQonLwi9h1sN2lB9RddFgzWTbb9IlYEpH4ZuvyCJNkR1D6FNGy8sQ8q7_dej9UechZiZKThN8UYreVs8w08ANLso7gekDubpF
+    return token;
+  }
+
+  Future<void> signIn(String email, String password) async {
+    try {
+      final data = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      final token = await getToken();
+      print(data.user.uid);
+
+      await Firestore.instance
+          .collection('user')
+          .document(data.user.uid)
+          .updateData({'token': token});
+      
+    } catch (e) {
       print('error $e');
-    }).whenComplete(() {
-      print('algo salio mal ');
-    });
+    }
   }
 
   Future<void> signUp(String email, String password, String name) async {
@@ -155,9 +176,13 @@ class UserModel extends ChangeNotifier {
       FirebaseUser userF = (await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password))
           .user;
+      final token = await getToken();
       Firestore firestore = Firestore.instance;
-      User newUser =
-          User(email: email, fullName: name, userId: userF.uid.toString());
+      User newUser = User(
+          email: email,
+          fullName: name,
+          userId: userF.uid.toString(),
+          token: token);
 
       await firestore
           .collection('user')

@@ -26,7 +26,7 @@ class _PinInMapState extends State<PinInMap> {
   List<LatLng> tappedPoints = [];
 
   _handleTap(LatLng latLng) {
-    print(latLng);
+    
     setState(() {
       tappedPoints = [];
       tappedPoints.add(latLng);

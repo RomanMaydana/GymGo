@@ -21,7 +21,7 @@ class PlanModel extends ChangeNotifier {
           .orderBy('plan', descending: true)
           .getDocuments();
       snapshot.documentChanges.forEach((DocumentChange doc) {
-        print('entro');
+        
         Plan plan = Plan.fromMap(doc.document.data);
         list.add(plan);
       });

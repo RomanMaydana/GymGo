@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gym_go/class/shopping_page.dart';
 import 'package:gym_go/model/plan.dart';
 import 'package:gym_go/model/plan_model.dart';
+import 'package:gym_go/pages/list_of_gym_by_plan.dart';
 import 'package:gym_go/widget/car_list_pla.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +24,7 @@ class Memberships extends StatelessWidget {
               height: 32,
             ),
             Text(
-              'GymGo te ofrece los siguientes planes. Elige entre los planes que tiene a disposición y selecciona el que mejor se adapte a tus necesidades.'
-            ),
+                'GymGo te ofrece los siguientes planes. Elige entre los planes que tiene a disposición y selecciona el que mejor se adapte a tus necesidades.'),
             SizedBox(
               height: 32,
             ),
@@ -35,11 +35,15 @@ class Memberships extends StatelessWidget {
                   height: 300,
                   plan: plan,
                   toBuy: () {
-                    Navigator.pushNamed(context, '/shopping', arguments: ShoppingPageArguments(
-                      plan: plan
-                    ));
+                    Navigator.pushNamed(context, '/shopping',
+                        arguments: ShoppingPageArguments(plan: plan));
                   },
-                  seeGyms: () {},
+                  seeGyms: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ListOfGymByPlan(
+                              plan: plan.plan,
+                            )));
+                  },
                 ),
               ),
           ],

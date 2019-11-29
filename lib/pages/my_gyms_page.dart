@@ -3,6 +3,7 @@ import 'package:gym_go/class/detail_gym_page_arguments.dart';
 import 'package:gym_go/class/gym_registration.dart';
 import 'package:gym_go/model/gym.dart';
 import 'package:gym_go/model/gym_model.dart';
+import 'package:gym_go/model/user.dart';
 import 'package:gym_go/style/text.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +11,8 @@ class MyGymsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GymModel gymModel = Provider.of(context);
+    UserModel userModel = Provider.of(context);
+    gymModel.getCollectionMyGym(userId: userModel.getUser().userId);
     final linearBlack = Container(
       height: 0.9,
       color: Colors.black12,

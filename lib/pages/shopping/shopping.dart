@@ -25,13 +25,13 @@ class _ShoppingPageState extends State<ShoppingPage> {
     subscriptionModel.subscripcion.price =
         widget.plan != null ? widget.plan.price : widget.gym.price;
     subscriptionModel.subscripcion.plan =
-        widget.plan != null ? widget.plan.plan : 'Sin Plan';
+        widget.plan != null ? widget.plan.plan : null;
     subscriptionModel.subscripcion.idUser = userModel.getUser().userId;
     subscriptionModel.subscripcion.nameUser = userModel.getUser().fullName;
     subscriptionModel.subscripcion.gymId =
-        widget.plan != null ? '' : widget.gym.gymId;
+        widget.plan != null ? null : widget.gym.gymId;
     subscriptionModel.subscripcion.nameGym =
-        widget.plan != null ? '' : widget.gym.name;
+        widget.plan != null ? null : widget.gym.name;
 
     return Scaffold(
       appBar: AppBar(

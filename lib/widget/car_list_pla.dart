@@ -41,81 +41,80 @@ class CardListPlan extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.centerLeft,
-            child: GestureDetector(
-              onTap: toBuy,
-              child: Container(
-                width: 220,
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 8,
-                        color: Colors.black.withOpacity(0.2),
-                        offset: Offset(5, 5),
-                        spreadRadius: 2,
-                      )
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            'Plan\n${plan.plan}',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        Icon(
-                          Icons.add_shopping_cart,
-                          color: Colors.green,
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text('Accede a ${plan.qty} Gimnasios'),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          '${plan.price.toString()} Bs',
-                          style: TextStyle(
-                              color: Color(0xff4f8acf),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Ver Gyms',
-                            style: TextStyle(color: Colors.black26),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_forward_ios,
-                            size: 15,
-                          ),
-                          onPressed: seeGyms,
-                        )
-                      ],
+            child: Container(
+              width: 220,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 8,
+                      color: Colors.black.withOpacity(0.2),
+                      offset: Offset(5, 5),
+                      spreadRadius: 2,
                     )
-                  ],
-                ),
+                  ]),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          'Plan\n${plan.plan}',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: toBuy,
+                          icon: Icon(
+                        Icons.add_shopping_cart,
+                        color: Colors.green,
+                      ))
+                    ],
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Text('Accede a ${plan.qty} Gimnasios'),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        '${plan.price.toString()} Bs',
+                        style: TextStyle(
+                            color: Color(0xff4f8acf),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Ver Gyms',
+                          style: TextStyle(color: Colors.black26),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                        ),
+                        onPressed: seeGyms,
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

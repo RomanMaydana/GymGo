@@ -26,7 +26,7 @@ class _DetailState extends State<Detail> {
 
     UserModel userModel = Provider.of(context);
     PlanModel planModel = Provider.of(context);
-    print(planModel.listPlan.length);
+    
     return Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -182,9 +182,9 @@ class _DetailState extends State<Detail> {
                                               _isAdded = true;
                                             });
 
-                                            print('esta  ${widget.edit}');
+                                            
                                             if (widget.edit == true) {
-                                              print('esta entrando');
+                                              
                                               await gymRegModel.editGym();
                                             } else {
                                               final gym = await gymRegModel

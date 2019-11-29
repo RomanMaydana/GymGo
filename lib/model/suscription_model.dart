@@ -18,11 +18,11 @@ class SubscriptionModel extends ChangeNotifier {
   }
 
   Subscripcion verifySubscriptionInGym(String gymId, String plan) {
-    print('$plan');
+    
     Subscripcion subscripcion = null;
 
     for (Subscripcion subs in this.availableSubs) {
-      print('subs ${subs.plan}');
+      
       if (subs.gymId == gymId) {
         subscripcion = subs;
       }
@@ -75,7 +75,7 @@ class SubscriptionModel extends ChangeNotifier {
 
       snapshot.documentChanges.forEach((DocumentChange doc) {
         Subscripcion subs = Subscripcion.fromMap(doc.document.data);
-        print('plan ' + subs.plan);
+        
         list.add(subs);
       });
 

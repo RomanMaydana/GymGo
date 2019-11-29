@@ -143,11 +143,13 @@ class CardSubscription extends StatelessWidget {
                   borderWidth: 5.0,
                   direction: Axis
                       .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
-                  center: Text('${time - timeQ} días', style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16
-                  ),),
+                  center: Text(
+                    '${time - timeQ} días',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16),
+                  ),
                 ),
               )
             ],

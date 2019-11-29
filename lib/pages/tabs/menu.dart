@@ -82,7 +82,7 @@ class MenuTab extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                gymModel.getCollectionMyGym(userId: userModel.getUser().userId);
+                // gymModel.getCollectionMyGym(userId: userModel.getUser().userId);
                 Navigator.pushNamed(context, '/mygyms');
               },
               leading: CircleAvatar(

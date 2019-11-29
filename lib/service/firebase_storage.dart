@@ -22,7 +22,7 @@ class Storage{
       await uploadTask.onComplete;
 
       final url = await storageReference.getDownloadURL();
-      print('subido');
+      
       Picture picture = Picture(name: Path.basename(image.path), url: url);
       return picture;
     } catch (e) {

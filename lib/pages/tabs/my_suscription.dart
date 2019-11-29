@@ -16,7 +16,7 @@ class MySubscriptionTab extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.open_in_new,
+              Icons.transit_enterexit,
               color: Theme.of(context).accentColor,
             ),
             onPressed: () {
@@ -28,13 +28,17 @@ class MySubscriptionTab extends StatelessWidget {
         ],
       ),
       // body: CardSubscription(),
-      body: ListView(
-        children: subscriptionModel.availableSubs
-            .map((subscripcion) => CardSubscription(
-                  subscripcion: subscripcion,
-                ))
-            .toList(),
-      ),
+      body: subscriptionModel.availableSubs.length == 0
+          ? Center(
+              child: Text('Aún no tiene Suscripciones.'),
+            )
+          : ListView(
+              children: subscriptionModel.availableSubs
+                  .map((subscripcion) => CardSubscription(
+                        subscripcion: subscripcion,
+                      ))
+                  .toList(),
+            ),
     );
   }
 }
