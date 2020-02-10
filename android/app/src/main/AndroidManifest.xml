@@ -12,6 +12,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="gym_go"
+
         android:icon="@mipmap/ic_launcher_foreground">
         <activity
             android:name=".MainActivity"
